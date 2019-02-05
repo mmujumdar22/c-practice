@@ -1,12 +1,13 @@
 #include <iostream>
+#include <cmath>
 using namespace cs225;
 #include "png.h"
 
-Image::lighten()
+void Image::lighten()
 {
-  for (unsigned x = 0; x < image.width(); x++) {
-    for (unsigned y = 0; y < image.height(); y++) {
-      HSLAPixel & pixel = image.getPixel(x, y);
+  for (unsigned x = 0; x < this->width(); x++) {
+    for (unsigned y = 0; y < this->height(); y++) {
+      HSLAPixel & pixel = this->getPixel(x, y);
 
       pixel.l = pixel.l + 0.1;
 
@@ -14,11 +15,11 @@ Image::lighten()
   }
 }
 
-Image::lighten(double amount)
+void Image::lighten(double amount)
 {
-  for (unsigned x = 0; x < image.width(); x++) {
-    for (unsigned y = 0; y < image.height(); y++) {
-      HSLAPixel & pixel = image.getPixel(x, y);
+  for (unsigned x = 0; x < this->width(); x++) {
+    for (unsigned y = 0; y < this->height(); y++) {
+      HSLAPixel & pixel = this->getPixel(x, y);
 
       pixel.l = pixel.l + amount;
 
@@ -26,11 +27,11 @@ Image::lighten(double amount)
   }
 }
 
-Image::darken()
+void Image::darken()
 {
-  for (unsigned x = 0; x < image.width(); x++) {
-    for (unsigned y = 0; y < image.height(); y++) {
-      HSLAPixel & pixel = image.getPixel(x, y);
+  for (unsigned x = 0; x < this->width(); x++) {
+    for (unsigned y = 0; y < this->height(); y++) {
+      HSLAPixel & pixel = this->getPixel(x, y);
 
       pixel.l = pixel.l - 0.1;
 
@@ -38,11 +39,11 @@ Image::darken()
   }
 }
 
-Image::darken(double amount)
+void Image::darken(double amount)
 {
-  for (unsigned x = 0; x < image.width(); x++) {
-    for (unsigned y = 0; y < image.height(); y++) {
-      HSLAPixel & pixel = image.getPixel(x, y);
+  for (unsigned x = 0; x < this->width(); x++) {
+    for (unsigned y = 0; y < this->height(); y++) {
+      HSLAPixel & pixel = this->getPixel(x, y);
 
       pixel.l = pixel.l - amount;
 
@@ -50,11 +51,11 @@ Image::darken(double amount)
   }
 }
 
-Image::saturate()
+void Image::saturate()
 {
-  for (unsigned x = 0; x < image.width(); x++) {
-    for (unsigned y = 0; y < image.height(); y++) {
-      HSLAPixel & pixel = image.getPixel(x, y);
+  for (unsigned x = 0; x < this->width(); x++) {
+    for (unsigned y = 0; y < this->height(); y++) {
+      HSLAPixel & pixel = this->getPixel(x, y);
 
       pixel.s = pixel.s + 0.1;
 
@@ -62,11 +63,11 @@ Image::saturate()
   }
 }
 
-Image::saturate(double amount)
+void Image::saturate(double amount)
 {
-  for (unsigned x = 0; x < image.width(); x++) {
-    for (unsigned y = 0; y < image.height(); y++) {
-      HSLAPixel & pixel = image.getPixel(x, y);
+  for (unsigned x = 0; x < this->width(); x++) {
+    for (unsigned y = 0; y < this->height(); y++) {
+      HSLAPixel & pixel = this->getPixel(x, y);
 
       pixel.s = pixel.s + amount;
 
@@ -74,11 +75,11 @@ Image::saturate(double amount)
   }
 }
 
-Image::desaturate()
+void Image::desaturate()
 {
-  for (unsigned x = 0; x < image.width(); x++) {
-    for (unsigned y = 0; y < image.height(); y++) {
-      HSLAPixel & pixel = image.getPixel(x, y);
+  for (unsigned x = 0; x < this->width(); x++) {
+    for (unsigned y = 0; y < this->height(); y++) {
+      HSLAPixel & pixel = this->getPixel(x, y);
 
       pixel.s = pixel.s - 0.1;
 
@@ -86,13 +87,29 @@ Image::desaturate()
   }
 }
 
-Image::desaturate(double amount)
+void Image::desaturate(double amount)
 {
-  for (unsigned x = 0; x < image.width(); x++) {
-    for (unsigned y = 0; y < image.height(); y++) {
-      HSLAPixel & pixel = image.getPixel(x, y);
+  for (unsigned x = 0; x < this->width(); x++) {
+    for (unsigned y = 0; y < this->height(); y++) {
+      HSLAPixel & pixel = this->getPixel(x, y);
 
       pixel.s = pixel.s - amount;
+
+    }
+  }
+}
+void Image::scale(double factor)
+{
+  int newWidth = this->width()*factor;
+  int newHeight = this->height()*factor;
+
+  PNG image = new PNG(newWidth,newHeight);
+
+  for (unsigned x = 0; x < this->width(); x++) {
+    for (unsigned y = 0; y < this->height(); y++) {
+      HSLAPixel & pixel = this->getPixel(x, y);
+      
+
 
     }
   }
