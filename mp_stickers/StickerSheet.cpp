@@ -275,3 +275,5 @@ void StickerSheet::copy(StickerSheet const & other) {
 		yCoordinate_[i] = other.yCoordinate_[i];
 	}
 }
+//clang++  -std=c++1y -stdlib=libc++ -O0 -pedantic -Wall -Werror -Wfatal-errors -Wextra -Wno-unused-parameter -Wno-unused-variable -MMD -MP -g -c StickerSheet.cpp -o .objs/StickerSheet.o
+//clang++ .objs/Image.o .objs/StickerSheet.o .objs/cs225/HSLAPixel.o .objs/cs225/PNG.o .objs/cs225/lodepng/lodepng.o .objs/tests/tests-part1.o .objs/tests/tests-part2.o .objs/cs225/catch/catchmain.o  -std=c++1y -stdlib=libc++ -o test
