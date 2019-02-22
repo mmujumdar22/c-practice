@@ -4,7 +4,7 @@
  */
 
 template <class T>
-List<T>::List() { 
+List<T>::List() {
   // @TODO: graded in MP3.1
     ListNode* head_ = NULL;
     ListNode* tail_ = NULL;
@@ -37,6 +37,14 @@ typename List<T>::ListIterator List<T>::end() const {
 template <typename T>
 void List<T>::_destroy() {
   /// @todo Graded in MP3.1
+//   ListNode * curr = head;
+// // iterate down the parameter list
+//   while (curr != NULL)
+//   {
+//     curr = head->next;
+//     delete head;
+//     head = curr;
+//   }
 }
 
 /**
@@ -49,19 +57,22 @@ template <typename T>
 void List<T>::insertFront(T const & ndata) {
   /// @todo Graded in MP3.1
   ListNode * newNode = new ListNode(ndata);
-  newNode -> next = head_;
-  newNode -> prev = NULL;
-  
-  if (head_ != NULL) {
-    head_ -> prev = newNode;
-  }
-  if (tail_ == NULL) {
-    tail_ = newNode;
-  }
-  
+  if(empty())
+   {
+       head = newNode;
+       tail = newNode;
+       nNode->prev = NULL;
+       nNode->next = NULL;
 
-  length_++;
-
+   }
+   else
+   {
+       head->prev = newNode;
+       nNode->next = head;
+       nNode->prev = NULL;
+       head = newNode;
+   }
+   length++;
 }
 
 /**
@@ -73,8 +84,24 @@ void List<T>::insertFront(T const & ndata) {
 template <typename T>
 void List<T>::insertBack(const T & ndata) {
   /// @todo Graded in MP3.1
-}
 
+      ListNode* newNode = new ListNode(ndata);
+      if(empty())
+      {
+          head = newNode;
+          tail = newNode;
+          nNode->prev = NULL;
+          nNode->next = NULL;
+      }
+      else
+      {
+          tail->next = newNode;
+          newNode->prev = tail;
+          newNode->next = NULL;
+          tail = newNode;
+      }
+      length++;
+  }
 /**
  * Helper function to split a sequence of linked memory at the node
  * splitPoint steps **after** start. In other words, it should disconnect
