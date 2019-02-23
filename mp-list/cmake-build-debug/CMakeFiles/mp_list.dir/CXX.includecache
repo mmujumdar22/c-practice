@@ -1,0 +1,34 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/Maitreya/CLionProjects/mp-list/List-ListIterator.hpp
+List.h
+/Users/Maitreya/CLionProjects/mp-list/List.h
+
+/Users/Maitreya/CLionProjects/mp-list/List-given.hpp
+
+/Users/Maitreya/CLionProjects/mp-list/List.h
+iterator
+-
+iostream
+-
+algorithm
+-
+List-ListIterator.hpp
+/Users/Maitreya/CLionProjects/mp-list/List-ListIterator.hpp
+List.hpp
+/Users/Maitreya/CLionProjects/mp-list/List.hpp
+List-given.hpp
+/Users/Maitreya/CLionProjects/mp-list/List-given.hpp
+
+/Users/Maitreya/CLionProjects/mp-list/List.hpp
+
+/Users/Maitreya/CLionProjects/mp-list/main.cpp
+List.h
+/Users/Maitreya/CLionProjects/mp-list/List.h
+
