@@ -63,7 +63,7 @@ void List<T>::insertFront(T const & ndata) {
   ListNode * newNode = new ListNode(ndata);
 //  newNode->data_ = ndata;
 
-  if(empty())
+  if(head_ == NULL)
    {
        head_ = newNode;
        tail_ = newNode;
@@ -77,6 +77,7 @@ void List<T>::insertFront(T const & ndata) {
        newNode->next = head_;
        newNode->prev = NULL;
        head_ = newNode;
+      // tail_ = newNode;
    }
    length_++;
 }
@@ -92,7 +93,7 @@ void List<T>::insertBack(const T & ndata) {
   /// @todo Graded in MP3.1
 
       ListNode* newNode = new ListNode(ndata);
-      if(empty())
+      if(tail_ == NULL)
       {
           head_ = newNode;
           tail_ = newNode;
@@ -105,7 +106,9 @@ void List<T>::insertBack(const T & ndata) {
           newNode->prev = tail_;
           newNode->next = NULL;
           tail_ = newNode;
+
       }
+
       length_++;
   }
 /**
@@ -127,20 +130,19 @@ void List<T>::insertBack(const T & ndata) {
 template <typename T>
 typename List<T>::ListNode * List<T>::split(ListNode * start, int splitPoint) {
   /// @todo Graded in MP3.1
-  ListNode * curr = start;
-//  ListNode * splitOffStart;
+  ListNode * cur = start;
 
-  for (int i = 0; i < splitPoint && curr != NULL; i++) {
-    curr = curr->next;
+  for (int i = 0; i < splitPoint && cur != NULL; i++) {
+    cur = cur->next;
   }
 
-  if (curr != NULL) {
-//      splitOffStart = curr;
-      curr->prev->next = NULL;
-      curr->prev = NULL;
+  if (cur != NULL) {
+
+      cur->prev->next = NULL;
+      cur->prev = NULL;
   }
 
-  return curr;
+  return cur;
 }
 
 /**
@@ -155,6 +157,36 @@ typename List<T>::ListNode * List<T>::split(ListNode * start, int splitPoint) {
 template <typename T>
 void List<T>::waterfall() {
   /// @todo Graded in MP3.1
+   // std::cout << __LINE__  << " " << std::endl;
+    ListNode *cur = head_;
+
+  //  std::cout << __LINE__  << " " << std::endl;
+    while(cur->next != tail_)
+    {
+        ListNode *temp = cur->next;
+       // std::cout << __LINE__  << " " << std::endl;
+       cur->next = temp->next;
+       temp->next->prev = cur;
+     //   std::cout << __LINE__  << " " << std::endl;
+       tail_ -> next = temp;
+     //   std::cout << __LINE__  << " " << std::endl;
+       temp -> prev = tail_;
+       temp -> next = NULL;
+     //   std::cout << __LINE__  << " " << std::endl;
+       tail_ = temp;
+       cur = cur->next;
+     //   std::cout << __LINE__  << " " << std::endl;
+//     if(temp->next != NULL)
+//     {
+//         cur = cur->next;
+//         //  std::cout << __LINE__  << " " << std::endl;
+//         temp = cur->next->next;
+//     }
+//     else
+//         break;
+       // std::cout << __LINE__  << " " << std::endl;
+    }
+
 }
 
 /**
