@@ -41,8 +41,9 @@ class KDTree
       KDTreeNode() : point(), left(NULL), right(NULL) {}
       KDTreeNode(const Point<Dim> &point) : point(point), left(NULL), right(NULL) {}
     };
-
+   
   public:
+
     /**
      * Determines if Point a is smaller than Point b in a given dimension d.
      * If there is a tie, break it with Point::operator<().
@@ -223,7 +224,7 @@ class KDTree
      * (https://courses.engr.illinois.edu/cs225/sp2018/private/mps/5/moore-tutorial.pdf).
      *
      * @see There is [an example]
-     * (https://courses.engr.illinois.edu/cs225/sp2019/mps/mosaics/) in the MP instructions.
+     * (https://courses.engr.illinois.edu/cs225/sp2018/mps/5/) in the MP5 instruction.
      *
      * @todo This function is required for MP 5.1.
      * @param query The point we wish to find the closest neighbor to in the
@@ -248,7 +249,7 @@ class KDTree
     /** Internal representation, root and size **/
     KDTreeNode *root;
     size_t size;
-
+    vector<Point<Dim>> Points;
     /** Helper function for grading */
     int getPrintData(KDTreeNode * subroot) const;
 
@@ -259,6 +260,157 @@ class KDTree
     /**
      * @todo Add your helper functions here.
      */
+    KDTreeNode* buildhelper(vector <Point<Dim>> &v, int vleft, int vright, int dimention){
+        if(vleft == vright){
+            
+            //cout << "left: " <<vleft<<" "<<"right: "<<vright<<" dimension: "<<dimention<<endl;
+            /*
+            for(unsigned long i = 0; i < v.size(); i++){
+                cout<<"(";
+                for(int j = 0; j < Dim; j++){
+                    cout<<v[i][j]<<",";
+                }
+                cout<<")";
+            }
+            cout<<endl;
+            */
+            KDTreeNode* subroot = new KDTreeNode(v[vleft]);
+            return subroot;
+        }else{
+            
+            //cout << "left: " <<vleft<<" "<<"right: "<<vright<<" dimension: "<<dimention<<endl;
+            /*
+            for(unsigned long i = 0; i < v.size(); i++){
+                cout<<"(";
+                for(int j = 0; j < Dim; j++){
+                    cout<<v[i][j]<<",";
+                }
+                cout<<")";
+            }
+            cout<<endl;
+            */
+            int median = (vleft + vright) / 2;
+            KDTreeNode* subroot = new KDTreeNode(getmedian(v, vleft, vright, median, dimention));
+            int newvright = (vleft+vright)/2-1 >= vleft ? (vleft+vright)/2-1 : vleft;
+            int newvleft = (vleft+vright)/2+1 <= vright ? (vleft+vright)/2+1 : vright;
+            if(median != vleft){
+                subroot->left = buildhelper(v, vleft, newvright, (dimention+1)%Dim);
+            }
+            if(median != vright){
+                subroot->right = buildhelper(v, newvleft, vright, (dimention+1)%Dim);
+            }
+            return subroot;
+        }     
+    }
+
+    Point<Dim>& getmedian(vector<Point<Dim>> &v, int start_point, int end_point, int median, int dimention){
+        int parti = partition(v, start_point, end_point, dimention);
+        if(start_point == end_point){
+            return v[start_point];
+        }
+        if(median < parti){
+            return getmedian(v, start_point, parti - 1, median, dimention);
+        }else if(median > parti){
+            return getmedian(v, parti + 1, end_point, median, dimention);
+        }else{
+            return v[parti];
+        }
+    }
+
+    int partition(vector <Point<Dim>> &v, int vleft, int vright, int dimention){
+        if(vleft == vright){
+            return vleft; 
+        }
+        int pivotIndex = int((vleft + vright) / 2);
+        Point<Dim> temp = v[vright];
+        v[vright] = v[pivotIndex];
+        v[pivotIndex] = temp;
+        int storeIndex = vleft;
+        for(int i = storeIndex; i < vright; i++){
+            if(v[i][dimention] < v[vright][dimention] || 
+            ((v[i][dimention] == v[vright][dimention])&&(v[i]<v[vright]))){
+                temp = v[storeIndex];
+                v[storeIndex] = v[i];
+                v[i] = temp;
+                storeIndex ++;
+            }
+        }
+        temp = v[storeIndex];
+        v[storeIndex] = v[vright];
+        v[vright] = temp;
+        return storeIndex; 
+    }
+
+    void _copy(KDTreeNode* &subroot, KDTreeNode* otherroot){
+        //std::cout<<std::endl<<"_copy has been called!"<<std::endl;
+        if(otherroot == NULL){
+            return;
+        }
+        subroot = new KDTreeNode(otherroot->point);
+        _copy(subroot->left, otherroot->left);
+        _copy(subroot->right, otherroot->right);
+    }
+
+    void _destory(KDTreeNode* subroot){
+        //std::cout<<std::endl<<"_destory has been called!"<<std::endl;
+        if(subroot == NULL){
+            return;
+        }else{
+            _destory(subroot -> left);
+            _destory(subroot -> right);
+            delete subroot;
+            subroot = NULL;
+        }
+    }
+
+    Point<Dim> findhelper( int dimention, int left, int right, 
+                        const Point<Dim> &find_best_, const Point<Dim> &query) const{
+        int median = (left + right)/2;
+        bool to_left = false;
+        Point<Dim> find_best = find_best_;
+        if(left == right){
+            if(shouldReplace(query, find_best, Points[left])){
+                find_best = Points[left];
+            }
+            
+            return find_best;
+        }else if (smallerDimVal(query, Points[median], dimention)){
+            if(left < median){
+                find_best = findhelper((dimention+1)%Dim, left, median - 1, find_best, query);
+                to_left = true;
+            }else if(median < right){
+                find_best = findhelper((dimention+1)%Dim, median+1, right, find_best, query);
+                to_left = false;
+            }
+        }else{
+            if(median < right){
+                find_best = findhelper((dimention+1)%Dim, median+1, right, find_best, query);
+            }else if(left < median){
+                find_best = findhelper((dimention+1)%Dim, left, median - 1, find_best, query);
+                to_left = true;
+            }
+        }
+
+        if(shouldReplace(query, find_best, Points[median])){
+            find_best = Points[median];
+        }
+
+        double bestdistance = 0;
+        double judge = 0;
+        for(int i = 0; i < Dim; i ++){
+            bestdistance += (find_best[i] - query[i])*(find_best[i] - query[i]);
+        }
+        judge = (Points[median][dimention] - query[dimention])*(Points[median][dimention] - query[dimention]);
+        if(judge <= bestdistance){
+            if(median < right && to_left){
+                find_best = findhelper((dimention+1)%Dim, median+1, right, find_best, query);
+            }else if(left < median && !to_left){
+                find_best = findhelper((dimention+1)%Dim, left, median-1, find_best, query);
+            }
+        }
+    
+        return find_best;
+    }
 };
 
 #include "kdtree.hpp"
