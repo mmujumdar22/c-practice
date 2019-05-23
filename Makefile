@@ -1,14 +1,21 @@
 EXENAME = main
+OBJS = main.o Node.o
 
 CXX = clang++
-CXXFLAGS = -std=c++0x -g -O0 -Wall -Wextra
+CXXFLAGS = -std=c++0x -c -g -O0 -Wall -Wextra
+LD = clang++
+LDFLAGS = -std=c++0x
 
-.PHONY: all
-all : $(EXENAME)
+all: $(EXENAME)
 
-$(EXENAME): q2.cpp epoch.cpp epoch.h
-	$(CXX) $(CXXFLAGS) q2.cpp epoch.cpp -o $(EXENAME)
+$(EXENAME): $(OBJS)
+	$(LD) $^ $(LDFLAGS) -o $@
 
-.PHONY: clean
+main.o: main.cpp
+	$(CXX) $< $(CXXFLAGS)
+
+Node.o: Node.cpp Node.h
+	$(CXX) $< $(CXXFLAGS)
+
 clean:
-	rm -f $(EXENAME)
+	-rm -f *.o $(EXENAME)
